@@ -10,14 +10,13 @@ router.get('/', (req, res) => {
         'album',
         'track'
     ]
-    // just making sure query actually contains a valid query.
-    let query = valid_queries.includes(req.query) ? req.query : null
+    let query = req.query
     let this_key, value
     for(key in query){
-        console.log('Here is key', key)
-        value = query[key].replace(/ /g, '%20')
+        valid_queries.includes(key) ? value = query[key].replace(/ /g, '%20') : value = null
         this_key = key
     }
+    console.log(value)
     if(req.query){
     axios.get(`https://api.spotify.com/v1/search?q=${value}&type=${this_key}`, {
         headers: {
@@ -34,7 +33,7 @@ router.get('/', (req, res) => {
             res.send(err)
         })
     }
-    res.send('Please enter a valid query')
+    // res.send('Please enter a valid query')
 })
 
 module.exports = router
